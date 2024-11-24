@@ -3,10 +3,10 @@ import SearchForm from "@/components/SearchForm";
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { query?: string };
+  searchParams: Promise<{ query?: string }>;
 }) {
   // Get the search query
-  const query = await searchParams.query;
+  const query = (await searchParams).query || "";
 
   return (
     <section className="pink_container">
