@@ -1,5 +1,11 @@
+// Import components
 import SearchForm from "@/components/SearchForm";
 import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
+
+// Import stuff from sanity
+import { client } from "@/sanity/lib/client";
+import { STARTUP_QUERY } from "@/sanity/lib/queries";
+import { STARTUP_QUERYResult } from "@/sanity/types";
 
 export default async function Home({
   searchParams,
@@ -9,49 +15,8 @@ export default async function Home({
   // Get the search query
   const query = (await searchParams).query || "";
 
-  // Dummy data for posts
-  const posts: StartupTypeCard[] = [
-    {
-      _id: "1",
-      category: "Technology",
-      title: "Technology Startup 1",
-      description: "Description 1",
-      image: "https://picsum.photos/800/600?random=1",
-      author: { _id: "1", name: "John Doe", image: "" },
-      views: 100,
-      _createdAt: new Date(),
-    },
-    {
-      _id: "2",
-      category: "Business",
-      title: "Business Startup 2",
-      description: "Description 2",
-      image: "https://picsum.photos/800/600?random=2",
-      author: { _id: "1", name: "John Doe", image: "" },
-      views: 200,
-      _createdAt: new Date(),
-    },
-    {
-      _id: "3",
-      category: "Technology",
-      title: "Technology Startup 3",
-      description: "Description 3",
-      image: "https://picsum.photos/800/600?random=3",
-      author: { _id: "1", name: "John Doe", image: "" },
-      views: 300,
-      _createdAt: new Date(),
-    },
-    {
-      _id: "4",
-      category: "Business",
-      title: "Business Startup 4",
-      description: "Description 4",
-      image: "https://picsum.photos/800/600?random=4",
-      author: { _id: "1", name: "John Doe", image: "" },
-      views: 400,
-      _createdAt: new Date(),
-    },
-  ];
+  // Fetch all startups from Sanity
+  const posts: STARTUP_QUERYResult = await client.fetch(STARTUP_QUERY);
 
   return (
     <>

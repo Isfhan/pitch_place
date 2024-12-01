@@ -1,24 +1,21 @@
-import { formatDate } from "@/lib/utils";
-import { EyeIcon } from "lucide-react";
+// Import stuff from next
 import Image from "next/image";
 import Link from "next/link";
+
+// Import stuff from utils
+import { formatDate } from "@/lib/utils";
+
+// Import components from ui
 import { Button } from "./ui/button";
 
-export type StartupTypeCard = {
-  _id: string;
-  category: string;
-  title: string;
-  description: string;
-  image: string;
-  author: {
-    _id: string;
-    name: string;
-    image: string;
-  };
-  _createdAt: Date;
-  views: number;
-};
+// Import icons
+import { EyeIcon } from "lucide-react";
 
+// Import stuff from sanity
+import { STARTUP_QUERYResult } from "@/sanity/types";
+
+// Export type StartupTypeCard
+export type StartupTypeCard = STARTUP_QUERYResult[number];
 
 const StartupCard = ({ post }: { post: StartupTypeCard }) => {
   // Destructure post object
@@ -28,7 +25,7 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
     title,
     description,
     image,
-    author: { _id: authorId, name: authorName, image: authorImage },
+    author,
     _createdAt,
     views,
   } = post;
@@ -49,8 +46,8 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
       <div className="flex-between mt-5 gap-5">
         <div className="flex-1">
           {/* Display Author Name */}
-          <Link href={`/user/${authorId}`}>
-            <p className="text-16-medium line-clamp-1">{authorName}</p>
+          <Link href={`/user/${author?._id}`}>
+            <p className="text-16-medium line-clamp-1">{author?.name}</p>
           </Link>
 
           {/* Display Title */}
@@ -60,10 +57,10 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
         </div>
 
         {/* Display Author Image */}
-        <Link href={`/user/${authorId}`}>
+        <Link href={`/user/${author?._id}`}>
           <Image
             src={"https://placehold.co/48x48.png"}
-            alt={authorName}
+            alt={author?.name || "Author Image"}
             width={48}
             height={48}
             className="rounded-full"
@@ -74,13 +71,15 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
       {/* Display Description and Image */}
       <Link href={`/startup/${_id}`}>
         <p className="startup-card_desc">{description}</p>
-        <Image
-          src={image}
-          alt={title}
-          width={800}
-          height={600}
-          className="startup-card_img"
-        />
+        {image && (
+          <Image
+            src={image}
+            alt={title || "Startup Image"}
+            width={800}
+            height={600}
+            className="startup-card_img"
+          />
+        )}
       </Link>
 
       <div className="flex-between gap-3 mt-5">
