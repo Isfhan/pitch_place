@@ -14,9 +14,13 @@ export default async function Home({
   // Get the search query
   const query = (await searchParams).query || "";
 
+  // Set the search query if it exists
+  const params = { search: query || null };
+
   // Fetch all startups from Sanity
   const { data: posts } = await sanityFetch({
     query: STARTUP_QUERY,
+    params,
   });
 
   return (
