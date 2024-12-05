@@ -3,9 +3,8 @@ import SearchForm from "@/components/SearchForm";
 import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
 
 // Import stuff from sanity
-import { client } from "@/sanity/lib/client";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { STARTUP_QUERY } from "@/sanity/lib/queries";
-import { STARTUP_QUERYResult } from "@/sanity/types";
 
 export default async function Home({
   searchParams,
@@ -16,7 +15,9 @@ export default async function Home({
   const query = (await searchParams).query || "";
 
   // Fetch all startups from Sanity
-  const posts: STARTUP_QUERYResult = await client.fetch(STARTUP_QUERY);
+  const { data: posts } = await sanityFetch({
+    query: STARTUP_QUERY,
+  });
 
   return (
     <>
@@ -49,6 +50,8 @@ export default async function Home({
           )}
         </ul>
       </section>
+      {/* Sanity Live Preview will be injected here */}
+      <SanityLive />
     </>
   );
 }
