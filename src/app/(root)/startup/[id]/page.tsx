@@ -1,14 +1,19 @@
 // Import stuff from next
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 // Import stuff from sanity
 import { STARTUP_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { formatDate } from "@/lib/utils";
-import Link from "next/link";
-import Image from "next/image";
-import markdownit from "markdown-it";
 import { client } from "@/sanity/lib/client";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
+
+// Import components
+import View from "@/components/View";
+
+// Import third-party packages
+import markdownit from "markdown-it";
 
 const md = markdownit();
 
@@ -93,6 +98,10 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
         <hr className="divider" />
       </section>
+
+      {/* Display total views using View Component */}
+      <View totalViews={post.views} />
+
       {/* Sanity Live Preview will be injected here */}
       <SanityLive />
     </>
