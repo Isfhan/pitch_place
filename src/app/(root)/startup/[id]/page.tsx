@@ -7,7 +7,6 @@ import Image from "next/image";
 import { STARTUP_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { formatDate } from "@/lib/utils";
 import { client } from "@/sanity/lib/client";
-import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 
 // Import components
 import View from "@/components/View";
@@ -22,10 +21,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
   // Fetch startup details
-  const { data: post } = await sanityFetch({
-    query: STARTUP_BY_ID_QUERY,
-    params: { id },
-  });
+  const post = await client.fetch(STARTUP_BY_ID_QUERY, { id });
 
   // Return 404 if startup details not found
   if (!post) return notFound();
@@ -100,10 +96,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       </section>
 
       {/* Display total views using View Component */}
-      <View totalViews={post.views} />
-
-      {/* Sanity Live Preview will be injected here */}
-      <SanityLive />
+      <View id={post._id} totalViews={post.views || 1} />
     </>
   );
 };
